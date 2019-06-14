@@ -22,11 +22,11 @@ node bamazonCustomer.js
 
 This will show up a table with all the products available to buy with their Id, description, department, price, and inventory.Then the user choose one to purchase. Once they have entered in the product and quantity, the app will complete the purchase if there is enough inventory. After the purcharse the Inventory is automatically updated.
 
-![Screenshot](/images/bamazoncustomer1.png)
+![Screenshot](/images/bamazonCustomer1.png)
 
 Id Validation
 
-![Screenshot](/images/bamazoncustomer2.png)
+![Screenshot](/images/bamazonCustomer2.png)
 
 2. bamazonManager.js
 By running 
