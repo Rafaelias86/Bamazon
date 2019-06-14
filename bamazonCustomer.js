@@ -26,7 +26,9 @@ connection.connect(function(err) {
 var showProducts = function(){
 	var query = "Select * FROM products";
 	connection.query(query, function(err, res){
-		console.log('Check out our selection...\n');
+		console.log('========================================================================');
+		console.log('                 CHECK OUT OUR SELECTION...                             ');
+		console.log('========================================================================');
 		if(err) throw err;
 		var displayTable = new Table ({
 			head: ["Item ID", "Product Name", "Department", "Price", "Inventory"],
@@ -38,6 +40,7 @@ var showProducts = function(){
 				);
 		}
 		console.log(displayTable.toString());
+		console.log("------------------------------------\n");
 		purchasePrompt();
 	});
 }
@@ -62,27 +65,34 @@ function purchasePrompt(){
 	//connect to database to find stock_quantity in database. If user quantity input is greater than stock, decline purchase.
 
 	connection.query("SELECT * FROM products WHERE item_id=?", answers.ID, function(err, res) {
+		if (res[0] == undefined){
+			console.log('========================================================================');
+			console.log('*                 SORRY... WE FOUND NO ITEMS WITH ID "' +  answers.ID + '"              *');
+			console.log('*                       PLEASE INSERT A VALID ID                       *');
+			console.log('========================================================================');
+			purchasePrompt();
+		}
 		for (var i = 0; i < res.length; i++) {
 
 			if (answers.QTY > res[i].stock_quantity) {
 
-				console.log("===================================================");
-				console.log("Sorry! Not enough in stock. Please try again later.");
-				console.log("===================================================");
+				console.log("========================================================================");
+				console.log("        SORRY! NOT ENOUGH IN STOCK. PLEASE TRY AGAIN LATER.             ");
+				console.log("========================================================================");
 				showProducts();
 
 			} else {
 				//list item information for user for confirm prompt
-				console.log("===================================");
-				console.log("Awesome! We can fulfull your order.");
-				console.log("===================================");
+				console.log("========================================================================");
+				console.log("               AWESOME! WE CAN FULFULL YOUR ORDER.                      ");
+				console.log("========================================================================");
 				console.log("You've selected:");
 				console.log("----------------");
 				console.log("Item: " + res[i].product_name);
 				console.log("Quantity: " + answers.QTY);
 				console.log("----------------");
 				console.log("Total: " + res[i].price * answers.QTY + "  $ ");
-				console.log("===================================");
+				console.log("========================================================================");
 
 				var newStock = (res[i].stock_quantity - answers.QTY);
 				var purchaseId = (answers.ID);
@@ -114,14 +124,14 @@ function confirmPrompt(newStock, purchaseId) {
                 item_id: purchaseId
             }], function(err, res) {});
 
-            console.log("=================================");
-            console.log("Transaction completed. Thank you.");
-            console.log("=================================");
+            console.log("========================================================================");
+            console.log("                TRANSACTION COMPLETED. THANK YOU.                       ");
+            console.log("========================================================================");
             reprompt();
         } else {
-            console.log("=================================");
-            console.log("No worries. Maybe next time!");
-            console.log("=================================");
+            console.log("========================================================================");
+            console.log(                   "NO WORRIES. MAYBE NEXT TIME!                         ");
+            console.log("========================================================================");
             reprompt();
         }
     });
@@ -142,6 +152,7 @@ function reprompt(){
 	  
 	} else{
 		console.log("Thank you come back soon!");
+		process.exit();
 	  }
 	});
   }
